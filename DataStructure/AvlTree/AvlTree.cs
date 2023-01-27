@@ -37,7 +37,7 @@ internal class AvlTree<T>
         var newNode = new Node<T>(target);
         Search(newNode, target, out var found, Compare);
         Console.WriteLine($"This node is {found!.Data}");
-        return found!.Data;
+        return found.Data;
     }
     
    public void GetMaxDepth(Node<T>? root)
@@ -102,7 +102,7 @@ internal class AvlTree<T>
         return Rebalance(currentNode, newNode, compare);
     }
 
-    private static Node<T>? Rebalance(Node<T>? childNode, Node<T>? newNode, CompareDelegate compare)
+    private Node<T>? Rebalance(Node<T>? childNode, Node<T>? newNode, CompareDelegate compare)
     {
         var balance = BalanceFactor(childNode); // -1 left, 0 balanced, 1 right
         if (balance > 1)
@@ -122,57 +122,32 @@ internal class AvlTree<T>
 
     #region Extensions
 
-    private static Node<T>? Delete(Node<T>? current, T data, CompareDelegate compare)
+    private Node<T>? Delete(Node<T>? current, T data, CompareDelegate compare)
     {
         if (current is null) return null;
         
         if (compare(data, current.Data) < 0)
             current.Left = Delete(current.Left, data, compare);
-        {
-            current.Left = Delete(current.Left, data, compare);
-            if (BalanceFactor(current) == -2) // left heavy
-            {
-                current = BalanceFactor(current.Right) <= 0
-                    ? RotateRight(current) 
-                    : RotateLeftRight(current);
-            }
-        }
         if (compare(data, current.Data) > 0)
-        {
             current.Right = Delete(current.Right, data, compare);
-            if (BalanceFactor(current) == 2) // right heavy
-            {
-                current = BalanceFactor(current.Right) >= 0 
-                    ? RotateLeft(current) 
-                    : RotateRightLeft(current);
-            }
-        }
         else // when the target node is archived
         {
             if (current.Right is not null)
             {
                 var parent = current.Right;
                 while (current.Left is not null)
-                {
                     current = current.Left;
-                }
-
+                
                 current.Data = parent.Data;
                 current.Right = Delete(current.Right, parent.Data, compare);
-                if (BalanceFactor(current.Left) == 2)
-                {
-                    current = BalanceFactor(current) >= 0
-                        ? RotateLeft(current)
-                        : RotateRightLeft(current);
-                }
             }
             else
             {
                 return current.Left;
             }
         }
-        
-        return current;
+
+        return Rebalance(current, Root, compare);
     }
     
     public static Node<T>? EmptyTree(Node<T>? current)
