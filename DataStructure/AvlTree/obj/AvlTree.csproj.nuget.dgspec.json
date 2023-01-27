@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\felix\\Desktop\\DataStructure\\AvlTree\\AvlTree.csproj": {}
+    "E:\\GitFork\\DataStructure\\DataStructure\\AvlTree\\AvlTree.csproj": {}
   },
   "projects": {
-    "C:\\Users\\felix\\Desktop\\DataStructure\\AvlTree\\AvlTree.csproj": {
+    "E:\\GitFork\\DataStructure\\DataStructure\\AvlTree\\AvlTree.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\felix\\Desktop\\DataStructure\\AvlTree\\AvlTree.csproj",
+        "projectUniqueName": "E:\\GitFork\\DataStructure\\DataStructure\\AvlTree\\AvlTree.csproj",
         "projectName": "AvlTree",
-        "projectPath": "C:\\Users\\felix\\Desktop\\DataStructure\\AvlTree\\AvlTree.csproj",
+        "projectPath": "E:\\GitFork\\DataStructure\\DataStructure\\AvlTree\\AvlTree.csproj",
         "packagesPath": "C:\\Users\\felix\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\felix\\Desktop\\DataStructure\\AvlTree\\obj\\",
+        "outputPath": "E:\\GitFork\\DataStructure\\DataStructure\\AvlTree\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\felix\\AppData\\Roaming\\NuGet\\NuGet.Config",

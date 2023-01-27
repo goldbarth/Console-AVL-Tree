@@ -7,13 +7,12 @@ Erstelle ein Projekt, in welchem du einen generischen AVL Baum erstellst. Erstel
 
 Folgende Bestandteile sollen enthalten sein:
 
-Zur Laufzeit sollen beliebig viele :
-- [ ] Benutzer-Eingabe zur Laufzeit
-- [x] Elemente hinzuzufügen
+Zur Laufzeit solle möglich sein:
+- [ ] Benutzer-Eingabe von Werten
+- [x] Elemente hinzufügen
 - [x] Elemente finden
 - [x] Elemente entfernen
-- [x] Abfrage ob ein Element vorhanden ist
-
+- [x] Abfragen ob ein Element vorhanden ist
 - [x] Der AVL Baum soll sich selber ausbalancieren und 
 - [x] die maximale Tiefe ausgeben können.
 - [x] Es soll möglich sein dem AVL Baum einen Delegaten zu übergeben, welcher die Bedingung für das Sortieren besitzt.

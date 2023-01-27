@@ -3,9 +3,10 @@
 internal class AvlTree<T>
 {
     public Node<T>? Root { get; set; }
+    public int Count { get; private set; }
     
     public delegate int CompareDelegate(T a, T b);
-    private readonly CompareDelegate _compare = Comparer<T>.Default.Compare;
+    public readonly CompareDelegate Compare = Comparer<T>.Default.Compare;
 
     public AvlTree()
     {
@@ -14,23 +15,29 @@ internal class AvlTree<T>
     
     public AvlTree(CompareDelegate compare) : this()
     {
-        _compare = compare;
+        Compare = compare;
     }
 
     #region Wrapper´s
-
     
     public void Insert(T data)
     {
+        Count++;
         var newNode = new Node<T>(data);
-        Root = Root is null ? Root = newNode : Insert(Root, newNode, _compare);
+        Root = Root is null ? Root = newNode : Insert(Root, newNode, Compare);
     }
 
-    public void Search(T target)
+    public void GetCount()
+    {
+        Console.WriteLine($"Die Anzahl der Knoten ist: {Count}");
+    }
+
+    public T Search(T target)
     {
         var newNode = new Node<T>(target);
-        Search(newNode, target, out var found, _compare);
+        Search(newNode, target, out var found, Compare);
         Console.WriteLine($"This node is {found!.Data}");
+        return found!.Data;
     }
     
    public void GetMaxDepth(Node<T>? root)
@@ -40,20 +47,26 @@ internal class AvlTree<T>
     
     public void Find(T target)
     {
-        if (Contains(Root, target, _compare))
+        if (Contains(Root, target, Compare))
             Console.WriteLine($"{target} was Found");
-        else if (!Contains(Root, target, _compare))
+        else if (!Contains(Root, target, Compare))
             Console.WriteLine($"{target} was not Found");
     }
     
-    public void Delete(T target)
+    public void Clear(T target)
     {
-        Delete(Root, target, _compare);
+        Count--;
+        Delete(Root, target, Compare);
+    }
+    
+    public void ClearTree()
+    {
+        EmptyTree(Root);
     }
     
     public bool Contains(T target)
     {
-        return Contains(Root, target, _compare);
+        return Contains(Root, target, Compare);
     }
     
     public void PrintTree()
@@ -161,11 +174,21 @@ internal class AvlTree<T>
         
         return current;
     }
+    
+    public static Node<T>? EmptyTree(Node<T>? current)
+    {
+        if (current is null) return current;
+        EmptyTree(current.Left);
+        EmptyTree(current.Right);
+        Console.WriteLine("Deleting node: " + current.Data);
+        current = null;
+
+        return current;
+    }
 
     private static Node<T>? Search(Node<T>? current, T data, CompareDelegate compare)
     {
         if (current is null) return null;
-
         if (compare(data, current.Data) < 0)
             return Search(current.Left, data, compare);
         if (compare(data, current.Data) > 0)
