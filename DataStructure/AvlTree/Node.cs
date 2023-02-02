@@ -2,7 +2,7 @@
 
 internal sealed class Node<T>
 {
-    public T Data;
+    public readonly T Data;
     public Node<T>? Left;
     public Node<T>? Right;
     public int Height;

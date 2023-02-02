@@ -5,7 +5,7 @@ internal static class TreePrinter<T>
 {
     #region Print Standard
 
-    public static bool PrintWithBalanceFactor = true;
+    public static bool PrintWithBalanceFactor { get; set; }
     
     private static string ConvertBalance(Node<T> current)
     {
@@ -54,7 +54,6 @@ internal static class TreePrinter<T>
             for (; next == null; item = item.Parent)
             {
                 var top = rootTop + 2 * level;
-
                 if (PrintWithBalanceFactor)
                 {
                     Print(item.Text, top, item.StartPos, s2: item.Text2);

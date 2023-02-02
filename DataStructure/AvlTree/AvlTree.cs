@@ -2,73 +2,74 @@
 
 internal class AvlTree<T>
 {
-    public Node<T>? Root { get; set; }
-    public int Count { get; private set; }
-    
-    public delegate int CompareDelegate(T a, T b);
-    public readonly CompareDelegate Compare = Comparer<T>.Default.Compare;
+    public Node<T>? Root { get; private set; }
+    private int Count { get; set; }
+
+    private delegate int CompareDelegate(T a, T b);
+
+    private static readonly CompareDelegate Compare = Comparer<T>.Default.Compare;
 
     public AvlTree()
     {
         Root = null;
     }
-    
-    public AvlTree(CompareDelegate compare) : this()
-    {
-        Compare = compare;
-    }
 
     #region Wrapper´s
     
-    public void Insert(T data)
+    public void Add(T data)
     {
         Count++;
         var newNode = new Node<T>(data);
-        Root = Root is null ? Root = newNode : Insert(Root, newNode, Compare);
+        Root = Root is null ? Root = newNode : Insert(Root, newNode);
     }
 
     public void GetCount()
     {
-        Console.WriteLine($"Die Anzahl der Knoten ist: {Count}");
+        Console.WriteLine($"\n\tDie Anzahl der Knoten ist: {Count}");
     }
 
-    public T Search(T target)
+    public Node<T>? GetNode(T target)
     {
-        var newNode = new Node<T>(target);
-        Search(newNode, target, out var found, Compare);
-        Console.WriteLine($"This node is {found!.Data}");
-        return found.Data;
+        var foundNode = Search(Root, target);
+        if (foundNode is null)
+        {
+            Console.WriteLine("\n\tDer gesuchte Knoten ist nicht vorhanden.");
+            return null;
+        }
+            
+        Console.WriteLine($"\n\tDer Knoten mit der Zahl {foundNode!.Data} wurde gefunden.");
+        return foundNode;
     }
     
-   public void GetMaxDepth(Node<T>? root)
+   public void GetMaxDepth()
    {
-       Console.WriteLine($"Max depth is {GetDepth(root)}");
+       Console.WriteLine($"\n\tDie maximale Höhe des Baums ist: {GetDepth(Root).ToString()}");
    }
     
-    public void Find(T target)
+    public void Contains(T target)
     {
-        if (Contains(Root, target, Compare))
-            Console.WriteLine($"{target} was Found");
-        else if (!Contains(Root, target, Compare))
-            Console.WriteLine($"{target} was not Found");
+        if (Contains(Root, target)) Console.WriteLine($"\n\tDer Knoten mit der Zahl {target} wurde gefunden");
+        else if (!Contains(Root, target)) Console.WriteLine($"\n\tDer Knoten mit der Zahl {target} wurde nicht gefunden");
     }
     
-    public void Clear(T target)
+    public void RemoveNode(T target)
     {
-        Count--;
-        Delete(Root, target, Compare);
+        if (target is null) 
+            Console.WriteLine($"\n\tZu der eingegebenen Zahl ({target}) gibt es keinen Knoten.");
+        else
+        {
+            Root = Remove(Root, target);
+            Console.WriteLine($"\n\tDer Knoten mit der Zahl ({target}) wurde gelöscht.");
+            Count--;
+        }
     }
     
-    public void ClearTree()
+    public static void SetPrintWithBalanceFactor(ConsoleKey key)
     {
-        EmptyTree(Root);
+        if (key is ConsoleKey.D1) TreePrinter<T>.PrintWithBalanceFactor = true;
+        if (key is ConsoleKey.D2) TreePrinter<T>.PrintWithBalanceFactor = false;
     }
-    
-    public bool Contains(T target)
-    {
-        return Contains(Root, target, Compare);
-    }
-    
+
     public void PrintTree()
     {
         TreePrinter<T>.Print(Root);
@@ -82,133 +83,88 @@ internal class AvlTree<T>
     #endregion
     
     #region Body
-    
-    public Node<T>? Insert(Node<T>? currentNode, Node<T> newNode, CompareDelegate compare)
+
+    private Node<T>? Insert(Node<T>? current, Node<T> node)
     {
-        if (currentNode is null) 
+        if (current is null) 
         {
-            currentNode = newNode;
-            return currentNode;
+            current = node;
+            return current;
         }
 
-        if (compare(newNode.Data, currentNode.Data) < 0) // go left
-            currentNode.Left = Insert(currentNode.Left, newNode, compare); 
-        else if (compare(newNode.Data, currentNode.Data) > 0) // go right
-            currentNode.Right = Insert(currentNode.Right, newNode, compare);
+        if (Compare(node.Data, current.Data) < 0) // go left
+            current.Left = Insert(current.Left, node); 
+        else if (Compare(node.Data, current.Data) > 0) // go right
+            current.Right = Insert(current.Right, node);
         else
-            return currentNode; // go to leaf node
+            return current; // go to leaf node
 
-        UpdateHeight(currentNode);
-        return Rebalance(currentNode, newNode, compare);
+        UpdateHeight(current);
+        return Rebalance(current, node);
     }
 
-    private Node<T>? Rebalance(Node<T>? childNode, Node<T>? newNode, CompareDelegate compare)
+    private Node<T> Rebalance(Node<T>? current, Node<T>? node)
     {
-        var balance = BalanceFactor(childNode); // -1 left, 0 balanced, 1 right
-        if (balance > 1)
-            childNode = (compare(newNode!.Data, childNode!.Left!.Data) < 0)
-                ? RotateRight(childNode)
-                : RotateLeftRight(childNode);
-        else if (balance < -1)
-            childNode = (compare(newNode!.Data, childNode!.Right!.Data) > 0)
-                ? RotateLeft(childNode)
-                : RotateRightLeft(childNode);
+        if (BalanceFactor(current) > 1)
+            current = (Compare(node!.Data, current!.Left!.Data) < 0)
+                ? RotateRight(current)
+                : RotateLeftRight(current);
+        else if (BalanceFactor(current) < -1)
+            current = (Compare(node!.Data, current!.Right!.Data) > 0)
+                ? RotateLeft(current)
+                : RotateRightLeft(current);
 
-        SetBalance(childNode);
-        return childNode;
+        current!.Balance = SetBalance(current);
+        return current;
     }
 
     #endregion
 
     #region Extensions
 
-    private Node<T>? Delete(Node<T>? current, T data, CompareDelegate compare)
+    private Node<T>? Remove(Node<T>? current, T data)
     {
         if (current is null) return null;
-        
-        if (compare(data, current.Data) < 0)
-            current.Left = Delete(current.Left, data, compare);
-        if (compare(data, current.Data) > 0)
-            current.Right = Delete(current.Right, data, compare);
-        else // when the target node is archived
+        if (Compare(data, current.Data) < 0)
+            current.Left = Remove(current.Left, data);
+        else if (Compare(data, current.Data) > 0)
+            current.Right = Remove(current.Right, data);
+        else
         {
-            if (current.Right is not null)
-            {
-                var parent = current.Right;
-                while (current.Left is not null)
-                    current = current.Left;
-                
-                current.Data = parent.Data;
-                current.Right = Delete(current.Right, parent.Data, compare);
-            }
-            else
-            {
-                return current.Left;
-            }
+            var left = current.Left;
+            var right = current.Right;
+            if (right is null) return left; // if right is empty, in left could be only one node (balanced)
+                                                // current node can be replaced, even if it is null
+            var min = GetMin(right);
+            min!.Right = RemoveMin(right);
+            min.Left = left;
+            return Rebalance(min, Root);
         }
 
-        return Rebalance(current, Root, compare);
-    }
-    
-    public static Node<T>? EmptyTree(Node<T>? current)
-    {
-        if (current is null) return current;
-        EmptyTree(current.Left);
-        EmptyTree(current.Right);
-        Console.WriteLine("Deleting node: " + current.Data);
-        current = null;
-
-        return current;
+        return Rebalance(current, Root);
     }
 
-    private static Node<T>? Search(Node<T>? current, T data, CompareDelegate compare)
+    private Node<T>? RemoveMin(Node<T> current)
     {
-        if (current is null) return null;
-        if (compare(data, current.Data) < 0)
-            return Search(current.Left, data, compare);
-        if (compare(data, current.Data) > 0)
-            return Search(current.Right, data, compare);
-
-        return current;
+        if (current.Left is null) return current.Right;
+        current.Left = RemoveMin(current.Left);
+        return Rebalance(current, Root);
     }
 
-    private static bool Search(Node<T>? current, T data, out Node<T>? node, CompareDelegate compare)
+    private static Node<T>? Search(Node<T>? root, T data)
     {
-        node = Search(current, data, compare);
-        return node is not null;
+        if (root is null) return null;
+        if (Compare(data, root.Data) < 0)
+            return Search(root.Left, data);
+        if (Compare(data, root.Data) > 0)
+            return Search(root.Right, data);
+        
+        return new Node<T>(data).Data is null ? null : new Node<T>(data);
     }
 
-    private static bool Contains(Node<T>? current, T data, CompareDelegate compare)
+    private static bool Contains(Node<T>? current, T data)
     {
-        return Search(current, data, compare) is not null;
-    }
-
-    #endregion
-
-    #region Traversals
-    
-    public void PreOrder(Node<T>? current) 
-    {
-        if (current is null) return;
-        Console.Write($"[{current.Data}] ");
-        PreOrder(current.Left);
-        PreOrder(current.Right);
-    }
-
-    public void InOrder(Node<T>? current)
-    {
-        if (current is null) return;
-        InOrder(current.Left);
-        Console.Write($"[{current.Data}] ");
-        InOrder(current.Right);
-    }
-
-    public void PostOrder(Node<T>? current)
-    {
-        if (current is null) return;
-        InOrder(current.Left);
-        InOrder(current.Right);
-        Console.Write($"[{current.Data}] ");
+        return Search(current, data) is not null;
     }
 
     #endregion
@@ -218,6 +174,11 @@ internal class AvlTree<T>
     private static int Height(Node<T>? current)
     {
         return current?.Height ?? 0;
+    }
+
+    private static Node<T>? GetMin(Node<T> current)
+    {
+        return current.Left is not null ? GetMin(current.Left) : current;
     }
 
     private static int SetBalance(Node<T>? current)
@@ -240,41 +201,37 @@ internal class AvlTree<T>
         current!.Height = Math.Max(Height(current.Left), Height(current.Right)) + 1;
     }
 
-    private static Node<T> RotateLeft(Node<T>? x)
+    private static Node<T> RotateLeft(Node<T>? current)
     {
-        var y = x?.Right;
-        var t2 = y?.Left;
+        var parent = current?.Right;
+        current!.Right = parent?.Left;
+        parent!.Left = current;
+
+        UpdateHeight(current); 
+        UpdateHeight(parent);
         
-        y!.Left = x;
-        x!.Right = t2;
-        
-        UpdateHeight(x); 
-        UpdateHeight(y);
-        
-        return y;
+        return parent;
     }
     
-    private static Node<T> RotateRight(Node<T>? y)
+    private Node<T> RotateRight(Node<T>? current)
     {
-        var x = y?.Left;
-        var t2 = x?.Right;
+        var parent = current?.Left;
+        current!.Left = parent?.Right;
+        parent!.Right = current;
+
+        UpdateHeight(current);
+        UpdateHeight(parent);
         
-        x!.Right = y;
-        y!.Left = t2;
-        
-        UpdateHeight(y);
-        UpdateHeight(x);
-        
-        return x;
+        return parent;
     }
 
-    private static Node<T> RotateLeftRight(Node<T>? parent)
+    private Node<T> RotateLeftRight(Node<T>? parent)
     {
         parent!.Left = RotateLeft(parent.Left);
         return RotateRight(parent);
     }
 
-    private static Node<T> RotateRightLeft(Node<T>? parent)
+    private Node<T> RotateRightLeft(Node<T>? parent)
     {
         parent!.Right = RotateRight(parent.Right);
         return RotateLeft(parent);
