@@ -181,7 +181,7 @@ public static class Application
         _isRandomInput = false;
         PrintOptions();
         Console.WriteLine("\n\tLösche einen vorhandenen Knoten in dem die Zahl des Knotens eingegeben wird: \n");
-        Tree.RemoveNode(ValidNumber());
+        Tree.Remove(ValidNumber());
         Console.WriteLine("\n\tEin aktualisierter Baum wird gezeichnet.");
         PrintOptions();
         UserOptions();
@@ -202,7 +202,7 @@ public static class Application
                 break;
         }
         
-        Tree.PrintTree();
+        Tree.Print();
     }
 
     #endregion

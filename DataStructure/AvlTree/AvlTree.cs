@@ -52,7 +52,7 @@ internal class AvlTree<T>
         else if (!Contains(Root, target)) Console.WriteLine($"\n\tDer Knoten mit der Zahl {target} wurde nicht gefunden");
     }
     
-    public void RemoveNode(T target)
+    public void Remove(T target)
     {
         if (target is null) 
             Console.WriteLine($"\n\tZu der eingegebenen Zahl ({target}) gibt es keinen Knoten.");
@@ -70,7 +70,7 @@ internal class AvlTree<T>
         if (key is ConsoleKey.D2) TreePrinter<T>.PrintWithBalanceFactor = false;
     }
 
-    public void PrintTree()
+    public void Print()
     {
         TreePrinter<T>.Print(Root);
     }
