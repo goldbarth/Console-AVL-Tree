@@ -16,14 +16,13 @@ Zur Laufzeit soll möglich sein:
 
 ## Test Cases
 
-![Insert - Left/Right Rebalance](/assets/images/AVL_testing1.png)
-![](/assets/images/AVL_testing2.png)
-![](/assets/images/AVL_testing2b.png)
-![](/assets/images/AVL_testing3.png)
-![](/assets/images/AVL_testing3b.png)
-![](/assets/images/AVL_testing3b.png)
-![Delete - Double Rebalancing](/assets/images/AVL_testing4.png)
-![](/assets/images/AVL_testing5.png)
-![](/assets/images/AVL_testing5b.png)
+![Insert - Left/Right Rebalance](../assets/images/AVL_testing1.png)
+![](../assets/images/AVL_testing2.png)
+![](../assets/images/AVL_testing2b.png)
+![](../assets/images/AVL_testing3.png)
+![](../assets/images/AVL_testing3b.png)
+![Delete - Double Rebalancing](../assets/images/AVL_testing4.png)
+![](../assets/images/AVL_testing5.png)
+![](../assets/images/AVL_testing5b.png)
 
 *Source: https://stackoverflow.com/questions/3955680/how-to-check-if-my-avl-tree-implementation-is-correct*
