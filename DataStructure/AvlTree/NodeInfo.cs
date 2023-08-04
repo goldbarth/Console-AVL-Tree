@@ -1,6 +1,6 @@
 ﻿namespace AvlTree;
 
-internal sealed class NodeInfo<T>
+public sealed class NodeInfo<T>
 {
     public Node<T>? Node;
     public string? Text;
@@ -13,5 +13,6 @@ internal sealed class NodeInfo<T>
         get => StartPos + Size;
         set => StartPos = value - Size;
     }
+    
     public NodeInfo<T>? Parent, Left, Right;
 }

@@ -1,6 +1,6 @@
 ﻿namespace AvlTree;
 
-internal sealed class Node<T>
+public sealed class Node<T>
 {
     public readonly T Data;
     public Node<T>? Left;

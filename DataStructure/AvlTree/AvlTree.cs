@@ -1,17 +1,16 @@
 ﻿namespace AvlTree;
 
-internal class AvlTree<T>
+public class AvlTree<T>
 {
-    public Node<T>? Root { get; private set; }
+    private Node<T>? _root;
     private int Count { get; set; }
 
     private delegate int CompareDelegate(T a, T b);
-
     private static readonly CompareDelegate Compare = Comparer<T>.Default.Compare;
 
     public AvlTree()
     {
-        Root = null;
+        _root = null;
     }
 
     #region Wrapper´s
@@ -20,7 +19,7 @@ internal class AvlTree<T>
     {
         Count++;
         var newNode = new Node<T>(data);
-        Root = Root is null ? Root = newNode : Insert(Root, newNode);
+        _root = _root is null ? _root = newNode : Insert(_root, newNode);
     }
 
     public void GetCount()
@@ -30,26 +29,26 @@ internal class AvlTree<T>
 
     public Node<T>? GetNode(T target)
     {
-        var foundNode = Search(Root, target);
+        var foundNode = Search(_root, target);
         if (foundNode is null)
         {
             Console.WriteLine("\n\tDer gesuchte Knoten ist nicht vorhanden.");
             return null;
         }
             
-        Console.WriteLine($"\n\tDer Knoten mit der Zahl {foundNode!.Data} wurde gefunden.");
+        Console.WriteLine($"\n\tDer Knoten mit der Zahl {foundNode.Data} wurde gefunden.");
         return foundNode;
     }
     
    public void GetMaxDepth()
    {
-       Console.WriteLine($"\n\tDie maximale Höhe des Baums ist: {GetDepth(Root).ToString()}");
+       Console.WriteLine($"\n\tDie maximale Höhe des Baums ist: {GetDepth(_root).ToString()}");
    }
     
     public void Contains(T target)
     {
-        if (Contains(Root, target)) Console.WriteLine($"\n\tDer Knoten mit der Zahl {target} wurde gefunden");
-        else if (!Contains(Root, target)) Console.WriteLine($"\n\tDer Knoten mit der Zahl {target} wurde nicht gefunden");
+        if (Contains(_root, target)) Console.WriteLine($"\n\tDer Knoten mit der Zahl {target} wurde gefunden");
+        else if (!Contains(_root, target)) Console.WriteLine($"\n\tDer Knoten mit der Zahl {target} wurde nicht gefunden");
     }
     
     public void Remove(T target)
@@ -58,7 +57,7 @@ internal class AvlTree<T>
             Console.WriteLine($"\n\tZu der eingegebenen Zahl ({target}) gibt es keinen Knoten.");
         else
         {
-            Root = Remove(Root, target);
+            _root = Remove(_root, target);
             Console.WriteLine($"\n\tDer Knoten mit der Zahl ({target}) wurde gelöscht.");
             Count--;
         }
@@ -72,19 +71,19 @@ internal class AvlTree<T>
 
     public void Print()
     {
-        TreePrinter<T>.Print(Root);
+        TreePrinter<T>.Print(_root);
     }
 
     public void VisualTree()
     {
-        TreePrinter<T>.Visualize(Root);
+        TreePrinter<T>.Visualize(_root);
     }
 
     #endregion
     
     #region Body
 
-    private Node<T>? Insert(Node<T>? current, Node<T> node)
+    private Node<T> Insert(Node<T>? current, Node<T> node)
     {
         if (current is null) 
         {
@@ -138,17 +137,17 @@ internal class AvlTree<T>
             var min = GetMin(right);
             min!.Right = RemoveMin(right);
             min.Left = left;
-            return Rebalance(min, Root);
+            return Rebalance(min, _root);
         }
 
-        return Rebalance(current, Root);
+        return Rebalance(current, _root);
     }
 
     private Node<T>? RemoveMin(Node<T> current)
     {
         if (current.Left is null) return current.Right;
         current.Left = RemoveMin(current.Left);
-        return Rebalance(current, Root);
+        return Rebalance(current, _root);
     }
 
     private static Node<T>? Search(Node<T>? root, T data)

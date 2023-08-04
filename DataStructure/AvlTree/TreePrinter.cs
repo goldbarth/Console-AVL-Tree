@@ -1,7 +1,7 @@
 ﻿namespace AvlTree;
 
 // Source: https://stackoverflow.com/questions/36311991/c-sharp-display-a-binary-search-tree-in-console
-internal static class TreePrinter<T>
+public static class TreePrinter<T>
 {
     #region Print Standard
 
