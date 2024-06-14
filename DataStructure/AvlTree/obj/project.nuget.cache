@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iKhaFSztifZ/MqlNp4tKPK1aCG5b4YAh0XgnZuf4MGBZrcHhZpMK7xocTuKuVq93FHX82wd5N9dHhJOzClLQOw==",
+  "dgSpecHash": "9h0mL/hQe5bjdMsST+27crIdVGegKC9iAGvAMlW1pIp3TOfuCFznFAYzHh/V0nabR+dBXvcgu1MILF3VVCqMLQ==",
   "success": true,
-  "projectFilePath": "E:\\GitFork\\DataStructure\\DataStructure\\AvlTree\\AvlTree.csproj",
+  "projectFilePath": "E:\\GitFork\\Console-AVL-Tree\\DataStructure\\AvlTree\\AvlTree.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

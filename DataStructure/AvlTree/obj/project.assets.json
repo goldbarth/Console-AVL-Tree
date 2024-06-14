@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\GitFork\\DataStructure\\DataStructure\\AvlTree\\AvlTree.csproj",
+      "projectUniqueName": "E:\\GitFork\\Console-AVL-Tree\\DataStructure\\AvlTree\\AvlTree.csproj",
       "projectName": "AvlTree",
-      "projectPath": "E:\\GitFork\\DataStructure\\DataStructure\\AvlTree\\AvlTree.csproj",
+      "projectPath": "E:\\GitFork\\Console-AVL-Tree\\DataStructure\\AvlTree\\AvlTree.csproj",
       "packagesPath": "C:\\Users\\felix\\.nuget\\packages\\",
-      "outputPath": "E:\\GitFork\\DataStructure\\DataStructure\\AvlTree\\obj\\",
+      "outputPath": "E:\\GitFork\\Console-AVL-Tree\\DataStructure\\AvlTree\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\felix\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -61,7 +61,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }

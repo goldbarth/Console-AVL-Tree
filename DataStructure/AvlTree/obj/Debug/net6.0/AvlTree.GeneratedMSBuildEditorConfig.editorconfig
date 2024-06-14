@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = AvlTree
-build_property.ProjectDir = E:\GitFork\DataStructure\DataStructure\AvlTree\
+build_property.ProjectDir = E:\GitFork\Console-AVL-Tree\DataStructure\AvlTree\
